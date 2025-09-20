@@ -1,0 +1,19 @@
+package com.bpifranceexec.exec.infrastructure.sql.dao;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "personne_physique")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode(of = "personneId")
+public class PersonnePhysiqueJpaEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private Long personneId;
+    private String nom;
+    private String prenom;
+}
