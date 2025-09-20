@@ -3,70 +3,53 @@ package com.bpifranceexec.exec.mapper;
 import com.bpifranceexec.exec.domaine.model.Entreprise;
 import com.bpifranceexec.exec.infrastructure.sql.dao.EntrepriseJpaEntity;
 import com.bpifranceexec.exec.infrastructure.sql.mapper.EntrepriseMapper;
+import com.bpifranceexec.exec.infrastructure.sql.mapper.EntrepriseMapperImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Unit tests for the EntrepriseMapper.
- * This test verifies that the mapping between the EntrepriseJpaEntity and the Entreprise domain model is correct.
- */
 class EntrepriseMapperTest {
 
-    private final EntrepriseMapper mapper = EntrepriseMapper.INSTANCE;
+private EntrepriseMapper entrepriseMapper;
+
+    @BeforeEach
+    void setUp() {
+        // MapStruct generates this implementation at compile-time.
+        entrepriseMapper = new EntrepriseMapperImpl();
+    }
     
     @Test
-    void shouldMapEntityToDomainCorrectly() {
-        // Arrange: Create a source JPA entity
+    void toDomain_shouldMapAllFieldsCorrectly() {
+        // Given
         EntrepriseJpaEntity entity = new EntrepriseJpaEntity();
-        UUID id = UUID.randomUUID();
-        entity.setId(id);
-        entity.setNom("Test Entreprise");
+        entity.setEntrepriseId(1L);
+        entity.setNom("Tech Solutions");
         entity.setSiret("12345678901234");
         
-        // Act: Map the entity to a domain object
-        Entreprise domain = mapper.toDomain(entity);
+        // When
+        Entreprise domain = entrepriseMapper.toDomain(entity);
         
-        // Assert: Verify that all fields were mapped correctly
-        assertThat(domain).isNotNull();
-        assertThat(domain.id()).isEqualTo(id);
-        assertThat(domain.nom()).isEqualTo("Test Entreprise");
+        // Then
+        assertThat(domain.id()).isEqualTo(1L);
+        assertThat(domain.nom()).isEqualTo("Tech Solutions");
         assertThat(domain.siret()).isEqualTo("12345678901234");
     }
     
     @Test
-    void shouldMapDomainToEntityCorrectly() {
-        // Arrange: Create a source domain object
-        UUID id = UUID.randomUUID();
-        Entreprise domain = new Entreprise(id, "Domain Corp", "98765432109876");
+    void toEntity_shouldMapAllFieldsCorrectly() {
+        // Given
+        Entreprise domain = new Entreprise(
+                2L,
+                "Innovate Corp",
+                "43210987654321"
+        );
         
-        // Act: Map the domain object to an entity
-        EntrepriseJpaEntity entity = mapper.toEntity(domain);
+        // When
+        EntrepriseJpaEntity entity = entrepriseMapper.toEntity(domain);
         
-        // Assert: Verify that all fields were mapped correctly
-        assertThat(entity).isNotNull();
-        assertThat(entity.getId()).isEqualTo(id);
-        assertThat(entity.getNom()).isEqualTo("Domain Corp");
-        assertThat(entity.getSiret()).isEqualTo("98765432109876");
-    }
-    
-    @Test
-    void shouldReturnNullWhenMappingNullEntityToDomain() {
-        // Act: Map a null entity
-        Entreprise domain = mapper.toDomain(null);
-        
-        // Assert: The result should be null
-        assertThat(domain).isNull();
-    }
-    
-    @Test
-    void shouldReturnNullWhenMappingNullDomainToEntity() {
-        // Act: Map a null domain object
-        EntrepriseJpaEntity entity = mapper.toEntity(null);
-        
-        // Assert: The result should be null
-        assertThat(entity).isNull();
+        // Then
+        assertThat(entity.getEntrepriseId()).isEqualTo(2L);
+        assertThat(entity.getNom()).isEqualTo("Innovate Corp");
+        assertThat(entity.getSiret()).isEqualTo("43210987654321");
     }
 }

@@ -11,9 +11,11 @@ import lombok.*;
 @Setter
 @EqualsAndHashCode(of = "personneId")
 public class PersonnePhysiqueJpaEntity {
+    
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long personneId;
+    
     private String nom;
     private String prenom;
 }

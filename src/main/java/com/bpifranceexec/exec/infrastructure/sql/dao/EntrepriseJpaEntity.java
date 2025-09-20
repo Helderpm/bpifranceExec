@@ -13,8 +13,9 @@ import lombok.*;
 @EqualsAndHashCode(of = "entrepriseId")
 public class EntrepriseJpaEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long entrepriseId;
+    
     private String nom;
     private String siret;
 }

@@ -14,7 +14,7 @@ import lombok.*;
 public class BeneficiaireJpaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long beneficiaireId;
     
     @ManyToOne
