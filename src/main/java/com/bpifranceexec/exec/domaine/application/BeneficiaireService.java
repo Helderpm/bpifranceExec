@@ -30,7 +30,7 @@ public class BeneficiaireService implements GestionBeneficiairePort {
     
     @Override
     public Optional<Beneficiaire> ajouterBeneficiaire(Beneficiaire beneficiaire) {
-        return Optional.of(beneficiaireRepositoryPort.save(beneficiaire));
+        return Optional.of(beneficiaireRepositoryPort.saveBeneficiaire(beneficiaire));
     }
     
     @Override
