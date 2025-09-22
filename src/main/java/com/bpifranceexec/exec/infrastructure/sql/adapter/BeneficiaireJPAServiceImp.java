@@ -12,55 +12,45 @@ import com.bpifranceexec.exec.infrastructure.sql.mapper.PersonnePhysiqueMapper;
 import com.bpifranceexec.exec.infrastructure.sql.repository.BeneficiaireJpaRepository;
 import com.bpifranceexec.exec.infrastructure.sql.repository.EntrepriseJpaRepository;
 import com.bpifranceexec.exec.infrastructure.sql.repository.PersonnePhysiqueJpaRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
-@Component
-@RequiredArgsConstructor
+@Service
+@AllArgsConstructor
 public class BeneficiaireJPAServiceImp implements BeneficiaireRepositoryPort {
 
-    @Autowired
-    private BeneficiaireJpaRepository beneficiaireJpaRepository;
-    
-    @Autowired
-    private BeneficiaireMapper beneficiaireMapper;
-
-    @Autowired
-    private EntrepriseJpaRepository entrepriseJpaRepository;
-    
-    @Autowired
-    private EntrepriseMapper entrepriseMapper;
-
-    @Autowired
-    private PersonnePhysiqueJpaRepository personnePhysiqueJpaRepository;
-    
-    @Autowired
-    private PersonnePhysiqueMapper personnePhysiqueMapper;
+    private final BeneficiaireJpaRepository beneficiaireJpaRepository;
+    private final BeneficiaireMapper beneficiaireMapper;
+    private final EntrepriseJpaRepository entrepriseJpaRepository;
+    private final EntrepriseMapper entrepriseMapper;
+    private final PersonnePhysiqueJpaRepository personnePhysiqueJpaRepository;
+    private final PersonnePhysiqueMapper personnePhysiqueMapper;
 
     @Override
     public List<Beneficiaire> findByEntrepriseMereId(Long entrepriseMereId) {
-        return beneficiaireJpaRepository.findByEntrepriseMereId(entrepriseMereId)
+        // Updated method call
+        return beneficiaireJpaRepository.findByEntrepriseMere_EntrepriseId(entrepriseMereId)
                 .stream()
                 .map(beneficiaireMapper::toDomain)
                 .toList();
     }
-
+    
     @Override
-    public Beneficiaire save(Beneficiaire beneficiaire) {
+    public Beneficiaire saveBeneficiaire(Beneficiaire beneficiaire) {
         var beneficiaireToSave = beneficiaireMapper.toEntity(beneficiaire);
         var savedEntity = beneficiaireJpaRepository.save(beneficiaireToSave);
         return beneficiaireMapper.toDomain(savedEntity);
     }
-
+    
     @Override
     public Entreprise saveEntreprise(Entreprise entreprise) {
         var entrepriseToSave  = entrepriseMapper.toEntity(entreprise);
         EntrepriseJpaEntity savedEntity = entrepriseJpaRepository.save(entrepriseToSave);
         return entrepriseMapper.toDomain(savedEntity);
     }
-
+    
     @Override
     public PersonnePhysique savePersonnePhysique(PersonnePhysique personnePhysique) {
         var personnePhysiqueToSave  = personnePhysiqueMapper.toEntity(personnePhysique);

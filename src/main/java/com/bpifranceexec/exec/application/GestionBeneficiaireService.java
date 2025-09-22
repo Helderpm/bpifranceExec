@@ -1,4 +1,4 @@
-package com.bpifranceexec.exec.domaine.application;
+package com.bpifranceexec.exec.application;
 
 import com.bpifranceexec.exec.domaine.model.Beneficiaire;
 import com.bpifranceexec.exec.domaine.model.Entreprise;
@@ -6,17 +6,21 @@ import com.bpifranceexec.exec.domaine.model.PersonnePhysique;
 import com.bpifranceexec.exec.domaine.port.in.GestionBeneficiairePort;
 import com.bpifranceexec.exec.domaine.port.out.BeneficiaireRepositoryPort;
 
-import lombok.RequiredArgsConstructor;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
-public class BeneficiaireService implements GestionBeneficiairePort {
+@Transactional
+public class GestionBeneficiaireService implements GestionBeneficiairePort {
 
     private final BeneficiaireRepositoryPort beneficiaireRepositoryPort;
+
+    public GestionBeneficiaireService(BeneficiaireRepositoryPort beneficiaireRepositoryPort) {
+        this.beneficiaireRepositoryPort = beneficiaireRepositoryPort;
+    }
 
     @Override
     public Optional<Entreprise> creerEntreprise(Entreprise entreprise) {

@@ -25,9 +25,6 @@ import java.util.List;
 public class BeneficiaireController {
 
     @Autowired
-    private GestionBeneficiairePort gestionBeneficiairePort;
-    
-    @Autowired
     private EntrepriseDtoMapper entrepriseMapper;
     
     @Autowired
@@ -35,6 +32,9 @@ public class BeneficiaireController {
     
     @Autowired
     private BeneficiaireDtoMapper beneficiaireMapper;
+
+    @Autowired
+    private GestionBeneficiairePort gestionBeneficiairePort;
 
     @PostMapping("/entreprise")
     @Operation(summary = "Ajouter une nouvelle entreprise")

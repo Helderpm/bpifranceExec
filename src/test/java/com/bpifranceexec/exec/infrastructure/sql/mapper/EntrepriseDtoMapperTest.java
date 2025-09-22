@@ -1,14 +1,12 @@
-package com.bpifranceexec.exec.mapper;
+package com.bpifranceexec.exec.infrastructure.sql.mapper;
 
 import com.bpifranceexec.exec.domaine.model.Entreprise;
 import com.bpifranceexec.exec.infrastructure.sql.dao.EntrepriseJpaEntity;
-import com.bpifranceexec.exec.infrastructure.sql.mapper.EntrepriseMapper;
-import com.bpifranceexec.exec.infrastructure.sql.mapper.EntrepriseMapperImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class EntrepriseMapperTest {
+class EntrepriseDtoMapperTest {
 
 private EntrepriseMapper entrepriseMapper;
 

@@ -1,4 +1,4 @@
-package com.bpifranceexec.exec.repositoryJpaTest;
+package com.bpifranceexec.exec.infrastructure.sql;
 
 import com.bpifranceexec.exec.domaine.model.Beneficiaire;
 import com.bpifranceexec.exec.domaine.model.Entreprise;

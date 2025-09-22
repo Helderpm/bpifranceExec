@@ -1,12 +1,10 @@
-package com.bpifranceexec.exec.mapper;
+package com.bpifranceexec.exec.infrastructure.sql.mapper;
 import com.bpifranceexec.exec.domaine.model.Beneficiaire;
 import com.bpifranceexec.exec.domaine.model.Entreprise;
 import com.bpifranceexec.exec.domaine.model.PersonnePhysique;
 import com.bpifranceexec.exec.infrastructure.sql.dao.BeneficiaireJpaEntity;
 import com.bpifranceexec.exec.infrastructure.sql.dao.EntrepriseJpaEntity;
 import com.bpifranceexec.exec.infrastructure.sql.dao.PersonnePhysiqueJpaEntity;
-import com.bpifranceexec.exec.infrastructure.sql.mapper.BeneficiaireMapper;
-import com.bpifranceexec.exec.infrastructure.sql.mapper.BeneficiaireMapperImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;

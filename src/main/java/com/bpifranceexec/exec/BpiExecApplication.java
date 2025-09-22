@@ -9,10 +9,10 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan({
         "com.bpifranceexec.exec.domaine",
-        "com.bpifranceexec.exec.infrastructure.repository",
-        "com.bpifranceexec.exec.exposition.mapper",
-        "com.bpifranceexec.exec.exposition",
-        "com.bpifranceexec.exec.exposition.mapper"
+        "com.bpifranceexec.exec.infrastructure",
+        "com.bpifranceexec.exec.application",
+        "com.bpifranceexec.exec.exposition"
+        
 })
 public class BpiExecApplication {
 
