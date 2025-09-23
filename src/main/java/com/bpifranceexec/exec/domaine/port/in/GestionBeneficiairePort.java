@@ -16,4 +16,5 @@ public interface GestionBeneficiairePort {
     Optional<Beneficiaire> ajouterBeneficiaire(Beneficiaire beneficiaire);
     
     List<Beneficiaire> recupererBeneficiaires(Long entrepriseId, String type);
+
 }

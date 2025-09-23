@@ -50,9 +50,9 @@ class BeneficiaireDtoMapperTest {
         // Assert
         assertNotNull(dto);
         assertEquals(domain.id(), dto.beneficiaireDtoId());
-        assertEquals(entrepriseMereDto, dto.entrepriseMereDtoId());
-        assertEquals(personnePhysiqueDto, dto.personnePhysiqueDtoId());
-        assertNull(dto.entrepriseFilleDtoId());
+        assertEquals(entrepriseMereDto, dto.entrepriseMereDto());
+        assertEquals(personnePhysiqueDto, dto.personnePhysiqueDto());
+        assertNull(dto.entrepriseFilleDto());
         assertEquals(domain.pourcentageDetention(), dto.pourcentageDetentionDto());
     }
     

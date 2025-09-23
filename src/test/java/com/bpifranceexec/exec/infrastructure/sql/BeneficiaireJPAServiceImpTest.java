@@ -21,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -66,6 +67,14 @@ class BeneficiaireJPAServiceImpTest {
         
         personnePhysiqueJpaEntity = new PersonnePhysiqueJpaEntity();
         personnePhysiqueDomain = new PersonnePhysique(3L, "Doe", "John");
+        
+        // Create domain objects with valid IDs
+        entrepriseDomain = new Entreprise(2L, "Entreprise Test", "12345");
+        personnePhysiqueDomain = new PersonnePhysique(3L, "Doe", "John");
+        
+        // Create a beneficiaireDomain with the populated objects
+        beneficiaireDomain = new Beneficiaire(1L, entrepriseDomain, personnePhysiqueDomain, null, 50);
+        
     }
     
     @Test
@@ -85,22 +94,32 @@ class BeneficiaireJPAServiceImpTest {
         verify(beneficiaireJpaRepository).findByEntrepriseMere_EntrepriseId(entrepriseId);
         verify(beneficiaireMapper).toDomain(beneficiaireJpaEntity);
     }
-    
+
     @Test
     void save_shouldSaveBeneficiaireCorrectly() {
         // Given
-        when(beneficiaireMapper.toEntity(beneficiaireDomain)).thenReturn(beneficiaireJpaEntity);
-        when(beneficiaireJpaRepository.save(beneficiaireJpaEntity)).thenReturn(beneficiaireJpaEntity);
-        when(beneficiaireMapper.toDomain(beneficiaireJpaEntity)).thenReturn(beneficiaireDomain);
+        // Mock the findById calls with specific IDs from the domain objects
+        when(entrepriseJpaRepository.findById(entrepriseDomain.id())).thenReturn(Optional.of(entrepriseJpaEntity));
+        when(personnePhysiqueJpaRepository.findById(personnePhysiqueDomain.id())).thenReturn(Optional.of(personnePhysiqueJpaEntity));
+        
+        // Now, mock the rest of the behavior
+        when(beneficiaireJpaRepository.save(any(BeneficiaireJpaEntity.class))).thenReturn(beneficiaireJpaEntity);
+        when(beneficiaireMapper.toDomain(any(BeneficiaireJpaEntity.class))).thenReturn(beneficiaireDomain);
         
         // When
         Beneficiaire savedBeneficiaire = beneficiaireJPAServiceImp.saveBeneficiaire(beneficiaireDomain);
         
         // Then
         assertThat(savedBeneficiaire).isEqualTo(beneficiaireDomain);
-        verify(beneficiaireMapper).toEntity(beneficiaireDomain);
-        verify(beneficiaireJpaRepository).save(beneficiaireJpaEntity);
-        verify(beneficiaireMapper).toDomain(beneficiaireJpaEntity);
+        
+        // Verify specific calls with the correct IDs
+        verify(entrepriseJpaRepository).findById(entrepriseDomain.id());
+        verify(personnePhysiqueJpaRepository).findById(personnePhysiqueDomain.id());
+        verify(beneficiaireJpaRepository).save(any(BeneficiaireJpaEntity.class));
+        verify(beneficiaireMapper).toDomain(any(BeneficiaireJpaEntity.class));
+        
+        // The mapper's toEntity method should not be called
+        verify(beneficiaireMapper, never()).toEntity(any(Beneficiaire.class));
     }
     
     @Test

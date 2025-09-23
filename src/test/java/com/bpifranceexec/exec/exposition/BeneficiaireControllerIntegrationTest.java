@@ -1,4 +1,4 @@
-package com.bpifranceexec.exec;
+package com.bpifranceexec.exec.exposition;
 
 import com.bpifranceexec.exec.exposition.rest.dto.BeneficiaireDto;
 import com.bpifranceexec.exec.exposition.rest.dto.EntrepriseDto;
@@ -38,7 +38,7 @@ class BeneficiaireControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(entrepriseDto)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.entrepriseDtoNom", is("NewCorp")));
+                .andExpect(jsonPath("$.entrepriseNom", is("NewCorp")));
     }
     
     @Test
@@ -51,58 +51,56 @@ class BeneficiaireControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(personneDto)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.personneDtoNom", is("Test")));
+                .andExpect(jsonPath("$.personneNom", is("Test")));
     }
 
-@Test
-@Transactional
-@Sql("/db/data.sql")
-void addBeneficiaire_shouldReturn201_onSuccess() throws Exception {
-    // Arrange - Use IDs that are already present in the data.sql script
-    // These IDs (1, 2, 3) are loaded by Spring Boot automatically
-    EntrepriseDto entrepriseMereDto = new EntrepriseDto(1L, null, null);
-    EntrepriseDto entrepriseFilleDto = new EntrepriseDto(2L, null, null);
-    PersonnePhysiqueDto personnePhysiqueDto = new PersonnePhysiqueDto(3L, null, null);
-    
-    // BeneficiaireDto for the POST request
-    BeneficiaireDto beneficiaireDto = new BeneficiaireDto(null, entrepriseMereDto, personnePhysiqueDto, entrepriseFilleDto, 75);
-    
-    // Act & Assert
-    mockMvc.perform(post("/api/beneficiaire")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(beneficiaireDto)))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.pourcentageDetentionDto", is(75)));
-}
     @Test
     @Transactional
-    @Sql("/db/data.sql") // This will execute the script before this test
-    void getBeneficiaires_shouldReturn200_withData_whenBeneficiariesExist() throws Exception {
-        // This test requires a valid `entrepriseId` that has associated beneficiaries in the test database.
-        // For a true integration test, you would pre-populate the H2 database.
+    @Sql("/db/data.sql")
+    void addBeneficiaire_shouldReturn201_onSuccess() throws Exception {
+        // Arrange - Create fully populated DTOs to match the expected JSON structure
+        EntrepriseDto entrepriseMereDto = new EntrepriseDto(1L, "Test Entreprise", "12345");
+        PersonnePhysiqueDto personnePhysiqueDto = new PersonnePhysiqueDto(2L, "John", "Doe");
+        EntrepriseDto entrepriseFilleDto = new EntrepriseDto(3L, "Test Child", "67890");
         
-        // Arrange (assuming test data exists for entrepriseId=1)
+        // BeneficiaireDto for the POST request
+        BeneficiaireDto beneficiaireDto = new BeneficiaireDto(null, entrepriseMereDto, personnePhysiqueDto, entrepriseFilleDto, 75);
+        
+        mockMvc.perform(post("/api/beneficiaire")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beneficiaireDto)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.pourcentage", is(75)))
+                .andExpect(jsonPath("$.beneficiaireId", is(notNullValue())))
+                .andExpect(jsonPath("$.entrepriseMere", is(notNullValue())));
+        
+    }
+
+    @Test
+    @Transactional
+    @Sql("/db/data.sql")
+    void getBeneficiaires_shouldReturn200_withData_whenBeneficiariesExist() throws Exception {
+        // Arrange (assuming the data.sql populates data for entrepriseId=1)
         Long existingEntrepriseId = 1L;
         
         // Act & Assert
         mockMvc.perform(get("/api/entreprise/{entrepriseId}/beneficiaires", existingEntrepriseId)
+                        .queryParam("type", "all")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(1))));
     }
 
-@Test
-@Transactional
-@Sql("/db/data.sql")
+    @Test
+    @Transactional
+    @Sql("/db/data.sql")
     void getBeneficiaires_shouldReturn204_whenNoBeneficiariesFound() throws Exception {
-        // This test requires an `entrepriseId` that exists but has no beneficiaries.
-        // For a true integration test, you would pre-populate the H2 database.
-        
-        // Arrange (assuming test data exists for entrepriseId=99 but with no beneficiaries)
+        // Arrange (assuming the data.sql populates data for entrepriseId=99 with no beneficiaries)
         Long emptyEntrepriseId = 99L;
         
         // Act & Assert
         mockMvc.perform(get("/api/entreprise/{entrepriseId}/beneficiaires", emptyEntrepriseId)
+                        .queryParam("type", "all")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
