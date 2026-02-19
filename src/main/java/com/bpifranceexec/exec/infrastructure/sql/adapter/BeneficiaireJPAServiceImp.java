@@ -93,4 +93,20 @@ public class BeneficiaireJPAServiceImp implements BeneficiaireRepositoryPort {
         return personnePhysiqueMapper.toDomain(savedEntity);
     }
     
+    @Override
+    public boolean existsPersonnePhysiqueById(Long personneId) {
+        if (personneId == null) {
+            throw new IllegalArgumentException("Personne ID cannot be null");
+        }
+        return personnePhysiqueJpaRepository.existsById(personneId);
+    }
+    
+    @Override
+    public boolean existsEntrepriseById(Long entrepriseId) {
+        if (entrepriseId == null) {
+            throw new IllegalArgumentException("Entreprise ID cannot be null");
+        }
+        return entrepriseJpaRepository.existsById(entrepriseId);
+    }
+    
 }

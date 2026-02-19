@@ -4,6 +4,7 @@ import com.bpifranceexec.exec.domaine.model.Beneficiaire;
 import com.bpifranceexec.exec.domaine.model.Entreprise;
 import com.bpifranceexec.exec.domaine.model.PersonnePhysique;
 import com.bpifranceexec.exec.domaine.port.out.BeneficiaireRepositoryPort;
+import com.bpifranceexec.exec.domaine.exception.EntrepriseInexistanteException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -67,6 +68,8 @@ class GestionBeneficiaireServiceTest {
     
     @Test
     void testAjouterBeneficiaire_shouldReturnOptionalOfBeneficiaire() {
+        when(beneficiaireRepositoryPort.existsPersonnePhysiqueById(101L)).thenReturn(true);
+        when(beneficiaireRepositoryPort.existsEntrepriseById(100L)).thenReturn(true); // entreprise mère existe
         when(beneficiaireRepositoryPort.saveBeneficiaire(any(Beneficiaire.class)))
                 .thenReturn(sampleBeneficiaire);
     
@@ -128,5 +131,36 @@ class GestionBeneficiaireServiceTest {
         assertEquals(1, result.size());
         assertEquals(beneficiaire1.id(), result.getFirst().id());
         assertEquals(40, result.getFirst().pourcentageDetention());
+    }
+    
+    @Test
+    void testAjouterBeneficiaire_shouldThrowExceptionWhenEntrepriseMereNotExists() {
+        // Create beneficiaire with non-existent entreprise mère
+        Entreprise nonExistentEntrepriseMere = new Entreprise(888L, "Non Existent Mere", "88888888888888");
+        Beneficiaire beneficiaireWithNonExistentMere = new Beneficiaire(104L, nonExistentEntrepriseMere, samplePersonnePhysique, null, 30);
+        
+        when(beneficiaireRepositoryPort.existsPersonnePhysiqueById(101L)).thenReturn(true);
+        when(beneficiaireRepositoryPort.existsEntrepriseById(888L)).thenReturn(false); // entreprise mère n'existe pas
+        
+        // Should throw EntrepriseInexistanteException
+        assertThrows(EntrepriseInexistanteException.class, () -> {
+            gestionBeneficiaireService.ajouterBeneficiaire(beneficiaireWithNonExistentMere);
+        });
+    }
+    
+    @Test
+    void testAjouterBeneficiaire_shouldThrowExceptionWhenEntrepriseFilleNotExists() {
+        // Create beneficiaire with non-existent entreprise fille
+        Entreprise nonExistentEntrepriseFille = new Entreprise(999L, "Non Existent", "99999999999999");
+        Beneficiaire beneficiaireWithNonExistentEntreprise = new Beneficiaire(103L, sampleEntreprise, samplePersonnePhysique, nonExistentEntrepriseFille, 25);
+        
+        when(beneficiaireRepositoryPort.existsPersonnePhysiqueById(101L)).thenReturn(true);
+        when(beneficiaireRepositoryPort.existsEntrepriseById(100L)).thenReturn(true); // entreprise mère existe
+        when(beneficiaireRepositoryPort.existsEntrepriseById(999L)).thenReturn(false); // entreprise fille n'existe pas
+        
+        // Should throw EntrepriseInexistanteException
+        assertThrows(EntrepriseInexistanteException.class, () -> {
+            gestionBeneficiaireService.ajouterBeneficiaire(beneficiaireWithNonExistentEntreprise);
+        });
     }
 }

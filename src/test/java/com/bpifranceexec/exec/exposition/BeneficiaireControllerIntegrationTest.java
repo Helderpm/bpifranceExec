@@ -31,14 +31,14 @@ class BeneficiaireControllerIntegrationTest {
     @Test
     void addEntreprise_shouldReturn201_onSuccess() throws Exception {
         // Arrange
-        EntrepriseDto entrepriseDto = new EntrepriseDto(null, "NewCorp", "987654321");
+        EntrepriseDto entrepriseDto = new EntrepriseDto(null, "ValidCorp", "12345678901234");
         
         // Act & Assert
         mockMvc.perform(post("/api/entreprise")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(entrepriseDto)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.entrepriseNom", is("NewCorp")));
+                .andExpect(jsonPath("$.entrepriseNom", is("ValidCorp")));
     }
     
     @Test
@@ -59,9 +59,9 @@ class BeneficiaireControllerIntegrationTest {
     @Sql("/db/data.sql")
     void addBeneficiaire_shouldReturn201_onSuccess() throws Exception {
         // Arrange - Create fully populated DTOs to match the expected JSON structure
-        EntrepriseDto entrepriseMereDto = new EntrepriseDto(1L, "Test Entreprise", "12345");
-        PersonnePhysiqueDto personnePhysiqueDto = new PersonnePhysiqueDto(2L, "John", "Doe");
-        EntrepriseDto entrepriseFilleDto = new EntrepriseDto(3L, "Test Child", "67890");
+        EntrepriseDto entrepriseMereDto = new EntrepriseDto(1L, "TestCorp", "12345678901234");
+        PersonnePhysiqueDto personnePhysiqueDto = new PersonnePhysiqueDto(3L, "Doe", "John");
+        EntrepriseDto entrepriseFilleDto = new EntrepriseDto(2L, "ChildCorp", "98765432109876");
         
         // BeneficiaireDto for the POST request
         BeneficiaireDto beneficiaireDto = new BeneficiaireDto(null, entrepriseMereDto, personnePhysiqueDto, entrepriseFilleDto, 75);

@@ -182,14 +182,39 @@ L'API expose les endpoints suivants pour la gestion des bénéficiaires effectif
 - **Tests unitaires** avec JUnit 5 et Mockito
 - **Tests d'intégration** BDD avec Cucumber
 - **Documentation API** automatique avec SpringDoc OpenAPI
+- **Documentation JavaDoc complète** pour tous les packages métier et application
+- **Gestion des erreurs** avec exceptions fonctionnelles et techniques spécifiques
+- **Tests unitaires complets** avec couverture de toutes les exceptions (29 tests passants)
 - **Validation des données** avec Spring Validation
 - **Mapping d'objets** avec MapStruct
 - **Console H2** pour l'exploration des données
 
+## Documentation du Code
+
+### Couverture JavaDoc 📚
+Le projet bénéficie d'une documentation JavaDoc complète et professionnelle :
+
+#### Package `domaine.model`
+- **Beneficiaire** : Record avec méthodes de validation métier
+- **Entreprise** : Record avec validations SIRET et complétude
+- **PersonnePhysique** : Record avec utilitaires de formatage et validation
+
+#### Package `domaine.port`
+- **GestionBeneficiairePort** : Interface des cas d'utilisation avec documentation détaillée
+- **BeneficiaireRepositoryPort** : Interface de persistance avec contrats clairs
+
+#### Package `application`
+- **GestionBeneficiaireService** : Service d'application avec documentation complète des opérations
+
+### Standards de Documentation
+- **Français** : Toute la documentation est en français pour cohérence métier
+- **JavaDoc complète** : Classes, méthodes, paramètres, retours et exceptions
+- **Références croisées** : Tags @see pour lier les classes/interfaces
+- **Exemples d'utilisation** : Documentation des filtres et cas d'usage
+- **Architecture expliquée** : Rôle de chaque composant dans l'architecture hexagonale
+
 ### Améliorations possibles 🔄
-- **Gestion des erreurs** : Créer des exceptions fonctionnelles et techniques spécifiques
 - **Responses standardisées** : Implémenter une classe de réponse uniforme pour l'API
-- **Documentation enrichie** : Ajouter JavaDoc détaillée pour les méthodes métier
 - **Base de données persistante** : Configurer PostgreSQL ou MySQL pour la production
 - **Sécurité** : Ajouter Spring Security avec JWT/OAuth2
 - **Monitoring** : Intégrer Actuator et des métriques
