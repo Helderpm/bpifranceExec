@@ -1,0 +1,9 @@
+{
+  "entrepriseMere": {
+    "id": "ID_DE_L_ENTREPRISE_CREEE"
+  },
+  "personnePhysique": {
+    "id": "ID_DE_LA_PERSONNE_PHYSIQUE_CREEE"
+  },
+  "pourcentageDetention": 30
+}
